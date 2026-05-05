@@ -118,3 +118,10 @@ select,
 textarea {
   font: inherit;
 }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}

@@ -64,9 +64,11 @@ function Reservations() {
             }
         },
 
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["my-reservations", userId] });
-            queryClient.invalidateQueries({ queryKey: ["reservations"] });
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["my-reservations", userId] });
+            await queryClient.invalidateQueries({ queryKey: ["reservations"] });
+            await queryClient.invalidateQueries({ queryKey: ["booked-slots"] });
+
             setSelectedReservation(null);
             setConfirmationMessage("Votre réservation a été supprimée");
 
@@ -80,7 +82,7 @@ function Reservations() {
     });
 
     useLockBodyScroll(!!selectedReservation);
-    useEscKeyDown(!!selectedReservation, () => { deleteReservation.reset(); setSelectedReservation(null) })
+    useEscKeyDown(!!selectedReservation, () => { if (!deleteReservation.isPending) { deleteReservation.reset(); setSelectedReservation(null) } })
 
     if (!userId) {
         return <div>Vous devez être connecté pour voir vos réservations.</div>;
@@ -134,51 +136,61 @@ function Reservations() {
 
             {selectedReservation && (
 
-                <div className="confirmation-modal">
+                <>
 
-                    <p>
-                        Voulez-vous supprimer votre réservation ? Cette action est irréversible.
-                    </p>
+                    <div className="confirmation-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="confirmation-title">
 
-                    {deleteReservation.isError && (
-                        <p className="error-text">
-                            {deleteReservation.error.message}
+                        <p>
+                            Voulez-vous supprimer votre réservation ? Cette action est irréversible.
                         </p>
-                    )}
 
-                    <div className="confirmation-buttons-wrapper">
+                        {deleteReservation.isError && (
+                            <p className="error-text">
+                                {deleteReservation.error.message}
+                            </p>
+                        )}
 
-                        <button className="confirmation-button delete" type="button" onClick={() => { deleteReservation.mutate(selectedReservation.id); }}
-                            disabled={deleteReservation.isPending}>
+                        <div className="confirmation-buttons-wrapper">
 
-                            <span>{deleteReservation.isPending ? "Suppression..." : "Oui"}</span>
+                            <button className="confirmation-button delete" type="button" onClick={() => { deleteReservation.mutate(selectedReservation.id); }}
+                                disabled={deleteReservation.isPending}>
 
-                        </button>
+                                <span>{deleteReservation.isPending ? "Suppression..." : "Oui"}</span>
 
-                        <button
-                            className="confirmation-button"
-                            type="button"
-                            onClick={() => { deleteReservation.reset(); setSelectedReservation(null) }}
-                            disabled={deleteReservation.isPending}
-                        >
-                            <span>Non</span>
+                            </button>
 
-                        </button>
+                            <button
+                                className="confirmation-button"
+                                type="button"
+                                onClick={() => { deleteReservation.reset(); setSelectedReservation(null) }}
+                                disabled={deleteReservation.isPending}
+                            >
+                                <span>Non</span>
+
+                            </button>
+
+                        </div>
+
+
 
                     </div>
 
 
+                    <HiddenOverlay onClose={() => {
+                        if (!deleteReservation.isPending) {
+                            deleteReservation.reset();
+                            setSelectedReservation(null);
+                        }
+                    }} type="sidebar" />
 
-                </div>
+                </>
+
 
             )}
 
-            {selectedReservation && <HiddenOverlay onClose={() => {
-                if (!deleteReservation.isPending) {
-                    deleteReservation.reset();
-                    setSelectedReservation(null);
-                }
-            }} type="sidebar" />}
 
             {confirmationMessage && (
                 <ConfirmationMessage

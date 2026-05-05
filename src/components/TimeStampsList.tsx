@@ -1,7 +1,7 @@
 
 import "./TimeStampsList.css";
 import { supabase } from "../lib/supabaseClient";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useApp } from "../context/AppContext";
 import type { SegmentString } from "../pages/Scheduler";
 import { useState } from "react";
@@ -9,6 +9,10 @@ import ConfirmationMessage from "./ConfirmationMessage";
 import HiddenOverlay from "./HiddenOverlay";
 import { useLockBodyScroll } from "../hooks/useLockBodyScroll";
 import { useEscKeyDown } from "../hooks/useEscKeyDown";
+import { formatTime } from "../utils/dateHelpers";
+import ConfirmationModal from "./ConfirmationModal";
+import { useBookedSlots } from "../hooks/useBookedSlots";
+import { getTimeSlots } from "../utils/timeSlotHelpers";
 
 
 type TimeStampsListProps = {
@@ -17,43 +21,22 @@ type TimeStampsListProps = {
     appNow: Date;
 }
 
-type CreateReservationInput = {
+export type CreateReservationInput = {
     startTime: Date;
     endTime: Date;
 };
 
-type BookedSlot = {
-    starts_at: string;
-    ends_at: string;
-};
-
-const formatTime = (date: Date) =>
-    date.toLocaleTimeString("fr-FR", {
-        hour: "2-digit",
-        minute: "2-digit",
-    });
 
 function TimeStampsList({ currentDay, segment, appNow }: TimeStampsListProps) {
 
     const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
     const [selectedSlot, setSelectedSlot] = useState<CreateReservationInput | null>(null);
 
-
-    const dayKey = `${currentDay.getFullYear()}-${String(
-        currentDay.getMonth() + 1
-    ).padStart(2, "0")}-${String(currentDay.getDate()).padStart(2, "0")}`;
-
     const queryClient = useQueryClient();
     const { session } = useApp();
 
     const currentHour = new Date(appNow);
     currentHour.setMinutes(0, 0, 0);
-
-    const buildDateTime = (day: Date, hour: number): Date => {
-        const dateTime = new Date(day);
-        dateTime.setHours(hour, 0, 0, 0);
-        return dateTime;
-    };
 
     const createReservation = useMutation({
 
@@ -108,61 +91,20 @@ function TimeStampsList({ currentDay, segment, appNow }: TimeStampsListProps) {
         }
     });
 
+    const filteredStamps = getTimeSlots(currentDay, segment);
 
-    const ranges = {
-        sun: [8, 14],
-        cloud: [16, 22],
-        moon: [0, 6],
-    };
-
-    const [min, max] = segment ? ranges[segment] : [0, 23];
-
-    const SLOT_DURATION_HOURS = 2;
-
-    const timeStamps = Array.from({ length: 12 }, (_, index) => {
-
-        const hour = index * SLOT_DURATION_HOURS;
-
-        const startTime = buildDateTime(currentDay, hour);
-        const endTime = buildDateTime(currentDay, hour + 2);
-
-        return {
-            id: `timeStamp${hour}`,
-            hour,
-            value: `${String(hour).padStart(2, "0")}:00 - ${String((hour + 2) % 24).padStart(2, "0")}:00`,
-            startTime,
-            endTime,
-        };
-    });
-
-    const filteredStamps = timeStamps.filter(t => t.hour >= min && t.hour <= max);
-
-
-
-    const { data: reservations = [], isLoading, error } = useQuery<BookedSlot[]>({
-        queryKey: ["booked-slots", dayKey],
-        queryFn: async () => {
-            const dayStart = new Date(currentDay);
-            dayStart.setHours(0, 0, 0, 0);
-
-            const dayEnd = new Date(currentDay);
-            dayEnd.setHours(24, 0, 0, 0);
-
-            const { data, error } = await supabase.rpc("get_booked_slots", {
-                p_start: dayStart.toISOString(),
-                p_end: dayEnd.toISOString(),
-            });
-
-            if (error) throw error;
-
-            return data ?? [];
-        },
-    });
-
+    const { data: bookedSlots = [], isLoading, error, } = useBookedSlots(currentDay);
 
 
     useLockBodyScroll(!!selectedSlot);
-    useEscKeyDown(!!selectedSlot, () => { createReservation.reset(); setSelectedSlot(null) });
+    useEscKeyDown(!!selectedSlot, () => {
+        if (!createReservation.isPending) {
+            createReservation.reset();
+            setSelectedSlot(null);
+        }
+    });
+
+
 
     if (isLoading) return <div>Chargement des créneaux...</div>;
     if (error) return <div>Impossible de charger les créneaux.</div>;
@@ -170,15 +112,13 @@ function TimeStampsList({ currentDay, segment, appNow }: TimeStampsListProps) {
     return (
 
         <>
-
-
             <ul className='time-stamps-list'>
 
                 {filteredStamps.map((slot) => {
 
-                    const isReserved = reservations.some(r => {
-                        const reservationStart = new Date(r.starts_at);
-                        const reservationEnd = new Date(r.ends_at);
+                    const isReserved = bookedSlots.some(bookedSlot => {
+                        const reservationStart = new Date(bookedSlot.starts_at);
+                        const reservationEnd = new Date(bookedSlot.ends_at);
 
                         return (
                             reservationStart.getTime() < slot.endTime.getTime() &&
@@ -208,74 +148,19 @@ function TimeStampsList({ currentDay, segment, appNow }: TimeStampsListProps) {
 
                 })}
 
-
-
-
-
-
             </ul >
 
-            {selectedSlot && (
+            {selectedSlot && (<>
 
-                <div className="confirmation-modal">
+                <ConfirmationModal selectedSlot={selectedSlot} setSelectedSlot={setSelectedSlot} createReservation={createReservation} />
+                <HiddenOverlay onClose={() => { if (!createReservation.isPending) { createReservation.reset(); setSelectedSlot(null); } }} type="sidebar" />
 
-                    <p>
-                        Voulez-vous réserver de {formatTime(selectedSlot.startTime)} à {formatTime(selectedSlot.endTime)} ?
-                    </p>
-
-                    {createReservation.isError && (
-                        <p className="error-text">
-                            {createReservation.error.message}
-                        </p>
-                    )}
-
-                    <div className="confirmation-buttons-wrapper">
-
-                        <button className="confirmation-button create" type="button"
-                            onClick={() => {
-                                createReservation.mutate({
-                                    startTime: selectedSlot.startTime,
-                                    endTime: selectedSlot.endTime,
-                                })
-                            }} disabled={createReservation.isPending}>
-
-                            <span>{createReservation.isPending ? "Réservation en cours..." : "Oui"}</span>
-
-                        </button>
-
-                        <button
-                            className="confirmation-button"
-                            type="button"
-                            onClick={() => { createReservation.reset(); setSelectedSlot(null) }}
-                            disabled={createReservation.isPending}
-                        >
-                            <span>Non</span>
-
-                        </button>
-
-                    </div>
-
-                </div>
+            </>
 
             )
             }
 
-            {selectedSlot && <HiddenOverlay onClose={() => {
-                if (!createReservation.isPending) {
-                    createReservation.reset();
-                    setSelectedSlot(null);
-                }
-            }} type="sidebar" />}
-
-            {
-                confirmationMessage && (
-                    <ConfirmationMessage
-                        message={confirmationMessage}
-                        onClose={() => setConfirmationMessage(null)}
-                    />
-                )
-            }
-
+            {confirmationMessage && (<ConfirmationMessage message={confirmationMessage} onClose={() => setConfirmationMessage(null)} />)}
         </>
 
 

@@ -47,7 +47,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
                         <div className="sidebar-closing-button-container">
 
                             <button className="sidebar-closing-button" onClick={() => setIsSidebarOpen(false)} aria-expanded={isSidebarOpen}
-                                aria-label="Close Sidebar" aria-controls="header-sidebar">
+                                aria-label="Fermer le menu" aria-controls="header-sidebar">
 
                                 <FontAwesomeIcon icon={faXmark} aria-hidden="true" />
 

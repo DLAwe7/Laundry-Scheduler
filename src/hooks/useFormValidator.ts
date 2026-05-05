@@ -33,9 +33,9 @@ export default function useFormValidator() {
 
         return (
             (doorNumber >= 1 && doorNumber <= 9) ||
-            (doorNumber >= 10 && doorNumber <= 20) ||
-            (doorNumber >= 21 && doorNumber <= 30) ||
-            (doorNumber >= 31 && doorNumber <= 46)
+            (doorNumber >= 10 && doorNumber <= 12) ||
+            (doorNumber >= 13 && doorNumber <= 24) ||
+            (doorNumber >= 24 && doorNumber <= 40)
         );
     };
 

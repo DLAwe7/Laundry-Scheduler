@@ -19,7 +19,8 @@ function ToggleThemeButton({ theme, setTheme }: ToggleThemeButtonProps) {
 
         <div className="toggle-theme-wrapper">
 
-            <button className={`toggle-theme-button ${theme === "light" ? "active" : ""}`} type="button" onClick={() => setTheme("light")} aria-label="Passer en mode clair">
+            <button className={`toggle-theme-button ${theme === "light" ? "active" : ""}`} type="button" onClick={() => setTheme("light")}
+                aria-label="Passer en mode clair" aria-pressed={theme === "light"}>
 
                 <FontAwesomeIcon icon={faSun} aria-hidden="true" />
 
@@ -27,7 +28,8 @@ function ToggleThemeButton({ theme, setTheme }: ToggleThemeButtonProps) {
 
             {" | "}
 
-            <button className={`toggle-theme-button ${theme === "dark" ? "active" : ""}`} type="button" onClick={() => setTheme("dark")} aria-label="Passer en mode sombre">
+            <button className={`toggle-theme-button ${theme === "dark" ? "active" : ""}`} type="button" onClick={() => setTheme("dark")}
+                aria-label="Passer en mode sombre" aria-pressed={theme === "dark"}>
 
                 <FontAwesomeIcon icon={faMoon} aria-hidden="true" />
 

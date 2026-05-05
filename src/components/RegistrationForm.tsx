@@ -121,7 +121,7 @@ function RegistrationForm() {
 
                 <div className="login-toggle">
                     <button className={`login-toggle-button ${mode === "login" ? "active" : ""}`} disabled={isSubmitting}
-                        type="button" onClick={() => setMode("login")}>
+                        type="button" onClick={() => setMode("login")} aria-pressed={mode === "login"}>
 
                         <span>Connexion</span>
 
@@ -130,14 +130,14 @@ function RegistrationForm() {
                     {"|"}
 
                     <button className={`login-toggle-button ${mode === "signup" ? "active" : ""}`} disabled={isSubmitting}
-                        type="button" onClick={() => setMode("signup")}>
+                        type="button" onClick={() => setMode("signup")} aria-pressed={mode === "signup"}>
 
                         <span>Inscription</span>
 
                     </button>
                 </div>
 
-                <label className="sr-only" htmlFor="door-number-input" />
+                <label className="sr-only" htmlFor="door-number-input">Numéro de logement</label>
                 <input id="door-number-input" type="text" value={formData.doorNumber} onChange={(e) =>
                     setFormData(prev => ({
                         ...prev,
@@ -146,7 +146,7 @@ function RegistrationForm() {
                 } placeholder="Numéro de logement" autoComplete="off" />
 
 
-                <label className="sr-only" htmlFor="password-input" />
+                <label className="sr-only" htmlFor="password-input">Mot de passe</label>
                 <input id="password-input" type="password" value={formData.password} onChange={(e) =>
                     setFormData(prev => ({
                         ...prev,
@@ -157,7 +157,7 @@ function RegistrationForm() {
 
                 {mode === "signup" && (
                     <>
-                        <label className="sr-only" htmlFor="repeat-password-input" />
+                        <label className="sr-only" htmlFor="repeat-password-input">Retaper le mot de passe</label>
                         <input id="repeat-password-input" type="password" value={formData.repeatPassword}
 
                             onChange={(e) =>
@@ -165,7 +165,7 @@ function RegistrationForm() {
                                     ...prev,
                                     repeatPassword: e.target.value,
                                 }))
-                            } placeholder="Répéter le mot de passe" autoComplete="off" />
+                            } placeholder="Retaper le mot de passe" autoComplete="off" />
 
                     </>
                 )}

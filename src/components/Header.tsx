@@ -22,7 +22,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen, theme, setTheme }: HeaderProp
 
         <header className='header'>
 
-            <button onClick={() => setIsSidebarOpen(true)} className='sidebar-opener' aria-label='Sidebar Opener'
+            <button onClick={() => setIsSidebarOpen(true)} className='sidebar-opener' aria-label='Ouvrir le menu'
                 aria-controls="header-sidebar" aria-expanded={isSidebarOpen}>
 
                 <FontAwesomeIcon icon={faBars} aria-hidden="true" />

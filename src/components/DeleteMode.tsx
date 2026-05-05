@@ -55,6 +55,8 @@ function DeleteMode({ searchTerm, setSearchTerm }: DeleteModeProps) {
         onSuccess: async (_data, doorNumber) => {
             await queryClient.invalidateQueries({ queryKey: ["admin-residents"] });
             await queryClient.invalidateQueries({ queryKey: ["admin-reservations"] });
+            await queryClient.invalidateQueries({ queryKey: ["booked-slots"] });
+            await queryClient.invalidateQueries({ queryKey: ["reservations"] });
 
             setSelectedDoorNumber(null);
             setConfirmationMessage(`Résident ${doorNumber} supprimé.`);
@@ -75,7 +77,7 @@ function DeleteMode({ searchTerm, setSearchTerm }: DeleteModeProps) {
     });
 
     useLockBodyScroll(!!selectedDoorNumber);
-    useEscKeyDown(!!selectedDoorNumber, () => { deleteResident.reset(); setSelectedDoorNumber(null) });
+    useEscKeyDown(!!selectedDoorNumber, () => { if (!deleteResident.isPending) { deleteResident.reset(); setSelectedDoorNumber(null) } });
 
     if (isLoading) return <div>Chargement des résidents...</div>;
     if (error) return <div>Impossible de charger les résidents.</div>;
@@ -134,50 +136,57 @@ function DeleteMode({ searchTerm, setSearchTerm }: DeleteModeProps) {
 
             {selectedDoorNumber && (
 
-                <div className="confirmation-modal">
+                <>
+                    <div className="confirmation-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="confirmation-title">
 
-                    <p>
-                        Voulez-vous supprimer l’utilisateur {selectedDoorNumber} ? Cette action est irréversible.
-                    </p>
-
-                    {deleteResident.isError && (
-                        <p className="error-text">
-                            {deleteResident.error.message}
+                        <p>
+                            Voulez-vous supprimer l’utilisateur {selectedDoorNumber} ? Cette action est irréversible.
                         </p>
-                    )}
 
-                    <div className="confirmation-buttons-wrapper">
+                        {deleteResident.isError && (
+                            <p className="error-text">
+                                {deleteResident.error.message}
+                            </p>
+                        )}
 
-                        <button className="confirmation-button delete" type="button"
-                            onClick={() => { deleteResident.mutate(selectedDoorNumber) }} disabled={deleteResident.isPending}>
+                        <div className="confirmation-buttons-wrapper">
 
-                            <span>{deleteResident.isPending ? "Suppression..." : "Oui"}</span>
+                            <button className="confirmation-button delete" type="button"
+                                onClick={() => { deleteResident.mutate(selectedDoorNumber) }} disabled={deleteResident.isPending}>
 
-                        </button>
+                                <span>{deleteResident.isPending ? "Suppression..." : "Oui"}</span>
 
-                        <button
-                            className="confirmation-button"
-                            type="button"
-                            onClick={() => { deleteResident.reset(); setSelectedDoorNumber(null) }}
-                            disabled={deleteResident.isPending}
-                        >
-                            <span>Non</span>
+                            </button>
 
-                        </button>
+                            <button
+                                className="confirmation-button"
+                                type="button"
+                                onClick={() => { deleteResident.reset(); setSelectedDoorNumber(null) }}
+                                disabled={deleteResident.isPending}
+                            >
+                                <span>Non</span>
+
+                            </button>
+
+                        </div>
 
                     </div>
 
-                </div>
+                    <HiddenOverlay onClose={() => {
+                        if (!deleteResident.isPending) {
+                            deleteResident.reset();
+                            setSelectedDoorNumber(null);
+                        }
+                    }} type="sidebar" />
+
+                </>
 
             )
             }
 
-            {selectedDoorNumber && <HiddenOverlay onClose={() => {
-                if (!deleteResident.isPending) {
-                    deleteResident.reset();
-                    setSelectedDoorNumber(null);
-                }
-            }} type="sidebar" />}
 
             {confirmationMessage && (
                 <ConfirmationMessage

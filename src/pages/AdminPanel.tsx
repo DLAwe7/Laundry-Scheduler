@@ -34,13 +34,13 @@ function AdminPanel() {
 
             <div className="mode-selector-wrapper">
 
-                <button className={`mode-selector-item ${mode === "inspect" ? "active" : ""}`} onClick={() => setMode("inspect")}>
+                <button className={`mode-selector-item ${mode === "inspect" ? "active" : ""}`} onClick={() => setMode("inspect")} aria-pressed={mode === "inspect"}>
                     <span>Inspection</span>
                 </button>
 
                 {" | "}
 
-                <button className={`mode-selector-item ${mode === "delete" ? "active" : ""}`} onClick={() => setMode("delete")}>
+                <button className={`mode-selector-item ${mode === "delete" ? "active" : ""}`} onClick={() => setMode("delete")} aria-pressed={mode === "delete"}>
                     <span>Suppression</span>
                 </button>
 

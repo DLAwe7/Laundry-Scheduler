@@ -8,7 +8,7 @@ type ConfirmationMessageProps = {
     duration?: number;
 };
 
-function ConfirmationMessage({ message, onClose, duration = 1500, }: ConfirmationMessageProps) {
+function ConfirmationMessage({ message, onClose, duration = 2000, }: ConfirmationMessageProps) {
 
     useEffect(() => {
         const timeoutId = window.setTimeout(() => {
