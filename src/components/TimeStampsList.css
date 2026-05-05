@@ -1,0 +1,27 @@
+.time-stamps-list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.time-stamps-item {
+    width: 100%;
+    text-align: center;
+    background-color: var(--row-color);
+    border: 1px solid var(--gray-border-color);
+}
+
+.time-stamps-item:nth-child(2n) {
+    background-color: var(--alternated-row-color);
+}
+
+.time-stamps-item button {
+    width: 100%;
+    padding: 1rem;
+}
+
+.time-stamps-item.booked {
+    pointer-events: none;
+    opacity: 0.4;
+}

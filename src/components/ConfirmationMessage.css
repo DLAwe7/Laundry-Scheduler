@@ -1,0 +1,42 @@
+.confirmation-message-wrapper {
+    width: min(600px, calc(100% - 2rem));
+    min-height: 80px;
+
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120%);
+
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    background-color: hsla(0, 0%, 12%, 0.872);
+    color: white;
+
+    border-radius: 20px;
+    padding: 1rem;
+
+    animation: toast-from-top 300ms ease forwards;
+    pointer-events: none;
+}
+
+.confirmation-message-wrapper p {
+    margin: 0;
+    pointer-events: none;
+}
+
+@keyframes toast-from-top {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-120%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}

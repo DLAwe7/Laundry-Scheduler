@@ -1,0 +1,120 @@
+:root {
+
+  --z-base: 1;
+  --z-sticky: 10;
+  --z-overlay: 11;
+  --z-menu: 12;
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --text-color: hsl(0, 0%, 95%);
+  --inverted-text-color: hsl(0, 0%, 0%);
+
+  --header-color: hsl(0, 0%, 13%);
+  --body-bg-color: hsl(0, 0%, 19%);
+
+  --active-btn-color: hsl(0, 0%, 25%);
+  --active-btn-svg: hsl(60, 100%, 66%);
+
+  --row-color: hsl(0, 0%, 25%);
+  --alternated-row-color: hsl(0, 0%, 22%);
+
+  --gray-border-color: hsla(0, 0%, 100%, 0.35);
+
+  --delete-button-color: hsl(0, 70%, 45%);
+  --create-button-color: hsl(142, 72%, 29%);
+  --admin-header-color: hsl(0, 0%, 17%);
+}
+
+:root.light {
+  color-scheme: light;
+
+  --text-color: hsl(0, 0%, 10%);
+  --inverted-text-color: hsl(0, 0%, 0%);
+
+  --header-color: hsl(0, 0%, 85%);
+  --body-bg-color: hsl(0, 0%, 90%);
+
+  --active-btn-color: hsl(0, 0%, 88%);
+  --active-btn-svg: hsl(246, 100%, 50%);
+
+  --row-color: hsl(0, 0%, 80%);
+  --alternated-row-color: hsl(0, 0%, 75%);
+
+  --gray-border-color: hsla(0, 0%, 0%, 0.25);
+
+  --delete-button-color: hsl(17, 88%, 40%);
+  --create-button-color: hsl(142, 72%, 29%);
+  --admin-header-color: hsl(0, 0%, 66%);
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-color);
+  background-color: var(--body-bg-color);
+
+}
+
+#root {
+  min-height: 100vh;
+}
+
+main {
+
+  min-height: 100vh;
+
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+a,
+a:visited,
+button,
+input,
+textarea,
+select,
+label,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li {
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}

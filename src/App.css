@@ -1,0 +1,44 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 1rem 2rem 2rem 2rem;
+    max-width: 600px;
+}
+
+
+.confirmation-modal {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: min(420px, calc(100% - 2rem));
+    max-width: 420px;
+    gap: 1rem;
+    background-color: var(--body-bg-color);
+    border-radius: 20px;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: var(--z-menu);
+    padding: 1rem;
+    border: 1px solid var(--gray-border-color);
+}
+
+.confirmation-buttons-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirmation-button {
+    border-radius: 20px;
+    border: 1px solid var(--gray-border-color);
+    padding: .4rem 1.5rem;
+}
+
+.confirmation-button.delete {
+    background-color: var(--delete-button-color);
+}
+
+.confirmation-button.create {
+    background-color: var(--create-button-color);
+}

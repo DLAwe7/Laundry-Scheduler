@@ -1,0 +1,76 @@
+.date-selector-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+
+}
+
+.date-displayer {
+    text-align: center;
+    min-width: 100px;
+}
+
+.date-selector-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.day-segment-filters {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    border-radius: 2rem;
+    border: 1px solid var(--gray-border-color);
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.segment-filters-item {
+    border-right: 1px solid gray;
+    transition: .2s ease;
+}
+
+.date-selector-button {
+    cursor: pointer;
+}
+
+.segment-filters-button {
+    cursor: pointer;
+    padding: .5rem 1rem;
+}
+
+.segment-filters-item svg {
+    transition: .2 ease;
+}
+
+.segment-filters-item:last-child {
+    border-right: none;
+}
+
+.segment-filters-item.active {
+    background-color: var(--active-btn-color);
+
+}
+
+.segment-filters-item.active svg {
+    color: var(--active-btn-svg)
+}
+
+@media (min-width: 650px) {
+
+    .date-selector-wrapper {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .day-segment-filters {
+        margin-bottom: 0;
+    }
+
+}

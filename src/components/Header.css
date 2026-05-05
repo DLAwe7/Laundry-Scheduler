@@ -1,0 +1,16 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    right: 0;
+    z-index: var(--z-sticky);
+    background-color: var(--header-color);
+    padding: 1rem;
+}
+
+.sidebar-opener {
+    cursor: pointer;
+    font-size: 1.2rem;
+}

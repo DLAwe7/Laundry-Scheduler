@@ -1,0 +1,70 @@
+.main-sidebar {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 0px;
+    left: 0px;
+    transform: translateX(-100%);
+    background-color: var(--header-color);
+    transition: transform 0.3s ease-in-out;
+    z-index: var(--z-menu);
+    min-width: 300px;
+    height: 100vh;
+}
+
+.main-sidebar.open {
+    transform: translateX(0%);
+}
+
+.sidebar-navigation {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar-closing-button-container {
+    align-self: flex-end;
+    background: none;
+    text-align: end;
+    padding: 1.2rem;
+}
+
+.sidebar-closing-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.sidebar-closing-button::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 2.4rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    z-index: -1;
+}
+
+.sidebar-closing-button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.sidebar-item button,
+.sidebar-item a {
+    display: block;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.sidebar-item a {
+    text-decoration: none;
+}

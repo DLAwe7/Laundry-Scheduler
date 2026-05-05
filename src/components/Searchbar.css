@@ -1,0 +1,33 @@
+.search-filter-wrapper {
+    position: relative;
+    width: 100%;
+
+}
+
+.shared-searchbar-input {
+    width: 100%;
+    border-radius: 20px;
+    border: 1.5px solid hsl(0, 0%, 29%);
+    background-color: white;
+    font: inherit;
+    padding: .5rem 3.5rem .5rem 3rem;
+    color: black;
+}
+
+
+
+.shared-searchbar-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: hsl(0, 0%, 20%);
+}
+
+.magnifying-wrapper {
+    left: 1rem;
+}
+
+
+.searchbar-input-clearer {
+    right: 1rem;
+}

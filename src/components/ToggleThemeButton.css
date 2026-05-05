@@ -1,0 +1,12 @@
+.toggle-theme-wrapper {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.toggle-theme-button {
+    cursor: pointer;
+}
+
+.toggle-theme-button.active {
+    color: gray;
+}
