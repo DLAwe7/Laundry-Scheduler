@@ -1,73 +1,99 @@
-# React + TypeScript + Vite
+# Laundry Reservation App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A laundry room reservation app built with React, TypeScript, Supabase, TanStack Query, and Netlify, created for a real residential community to improve scheduling organization and reduce reservation conflicts.
 
-Currently, two official plugins are available:
+Users can reserve laundry time slots, view their reservations, and cancel them. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Admin users have access to a protected panel for inspecting reservations and deleting resident accounts.
 
-## React Compiler
+## Screenshot
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+![Laundry app preview](public/laundry-app-preview.png)
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Project Goals
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+This project was created with the purpose of reducing reservation conflicts and providing an easy way to organize the laundry room schedule for a real residential community.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+In order to keep the app cost-free and permanently lightweight, I opted for free-tier services: Netlify for hosting and Supabase for the database. I also used GitHub Actions to run a daily script that deletes reservations older than 7 days.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To avoid the need for sensitive real user data, as well as reduce the weight and complexity of heavy login forms, I used a fake email system based on each resident’s unique door number. This allows admins to identify users through their door number while keeping that information private from other residents.
+
+Thus, a need for roles arose.
+
+- Users can inspect, create, and cancel their own reservations for any future time slot. As an abuse-prevention measure, each user is limited to a maximum of 2 active reservations.
+
+- Admins can view all reservations and who they belong to, create reservations for themselves, inspect resident accounts, and delete users when necessary.
+
+
+## Tech Stack
+
+- React
+- TypeScript
+- Vite
+- Supabase
+- TanStack Query
+- React Router
+- Netlify
+
+
+## Features
+
+- Authentication with Supabase
+- Protected user routes
+- Role-based admin panel
+- Time-slot reservation system
+- Conflict handling for already-booked slots
+- Maximum active reservation limit
+- User reservation management
+- Admin resident deletion flow
+- Toast confirmation messages
+- Light/dark theme support
+- Responsive mobile-friendly UI
+
+
+## Public Repository Note
+
+This repository is a sanitized public version of the project.
+
+The app was originally created for a real residential community, but all organization-specific details, private identifiers, production database connections, and sensitive backend configuration have been removed.
+
+Because of that, the project is intended to demonstrate the frontend structure, user flow, UI decisions, and integration approach rather than serve as a fully plug-and-play production clone.
+
+## Run Locally
+
+### 1. Install dependencies
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Create a .env file in the project root
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_SUPABASE_URL=YOUR_SUPABASE_URL
+VITE_SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_PUBLISHABLE_KEY
 ```
+
+### 3. Start the development server
+
+```bash
+npm run dev
+```
+
+## Backend and Deployment Notes
+
+The Supabase backend setup is not included in this public repository.
+
+A full setup requires:
+
+ - Supabase Auth
+ - Database tables.
+ - Row Level Security policies.
+ - RPC functions.
+ - An admin-only Edge Function.
+
+
+## Status
+
+This is a portfolio-ready public version of a real-use project. The production version was designed around a specific residential community, while this repository keeps the codebase public-safe by removing private backend and organization-specific details.
