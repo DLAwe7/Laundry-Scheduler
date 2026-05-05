@@ -1,6 +1,6 @@
 # Laundry Reservation App
 
-A laundry room reservation app built with React, TypeScript, Supabase, TanStack Query, and Netlify, created for a real residential community to improve scheduling organization and reduce reservation conflicts.
+A Full-Stack laundry room reservation app built with React, TypeScript, Supabase, TanStack Query, and Netlify, created for a real residential community to improve scheduling organization and reduce reservation conflicts.
 
 Users can reserve laundry time slots, view their reservations, and cancel them. 
 
